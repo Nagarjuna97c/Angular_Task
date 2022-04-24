@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { userData } from '../user-data.service';
+import { UserData } from '../user-data.service';
 
 @Component({
   selector: 'app-add-user',
@@ -9,9 +9,8 @@ import { userData } from '../user-data.service';
 })
 export class AddUserComponent implements OnInit {
   userDetails: FormGroup;
-  userList: any[] = [];
 
-  constructor(private userData: userData) {}
+  constructor(private userData: UserData) {}
 
   ngOnInit(): void {
     this.userDetails = new FormGroup({
@@ -23,8 +22,6 @@ export class AddUserComponent implements OnInit {
   }
 
   onAddUser() {
-    this.userList.push(this.userDetails.value);
-    const stringifiedData = JSON.stringify(this.userList);
-    localStorage.setItem('userData', stringifiedData);
+    this.userData.addUser(this.userDetails.value);
   }
 }

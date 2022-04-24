@@ -1,0 +1,16 @@
+<div class="users-list">
+  <div class="user">
+    <p class="heading">User Name</p>
+    <p>{{ user.username }}</p>
+  </div>
+  <div class="mail">
+    <p class="heading">User Email</p>
+    <p>{{ user.email }}</p>
+  </div>
+  <div class="buttons">
+    <button class="btn btn-primary" (click)="openEditPopup()">
+      Edit Details
+    </button>
+    <button class="btn btn-danger" (click)="deleteUser()">Delete User</button>
+  </div>
+</div>

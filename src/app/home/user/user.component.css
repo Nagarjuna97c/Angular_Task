@@ -1,0 +1,46 @@
+.users-list {
+    width: 400px;
+    margin: 40px;
+    border: 1px solid;
+    border-radius: 8px;
+    box-shadow: 7px 2px 5px grey;
+  }
+  
+  .heading {
+    width: 200px;
+    margin: 0;
+    font-weight: bold;
+    margin: 0 auto;
+    font-size: 16px;
+  }
+  
+  p {
+    width: 300px;
+    margin: 0;
+    font-size: 18px;
+  }
+  
+  .user,
+  .mail,
+  .buttons {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 40px;
+    background-color: rgb(138, 209, 138);
+    padding-left: 20px;
+  }
+  
+  .mail {
+    background-color: rgb(190, 181, 181);
+  }
+  
+  .buttons {
+    background-color: rgb(137, 139, 120);
+    justify-content: flex-start;
+  }
+  
+  button {
+    margin: 15px;
+  }
+  

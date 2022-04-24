@@ -10,7 +10,8 @@ import { AuthService } from './auth.service';
 import { AuthGaurdService } from './auth-gaurd-service';
 import { NavBarComponent } from './nav-bar/nav-bar.component';
 import { AddUserComponent } from './add-user/add-user.component';
-import { userData } from './user-data.service';
+import { UserData } from './user-data.service';
+import { UserComponent } from './home/user/user.component';
 
 @NgModule({
   declarations: [
@@ -19,9 +20,10 @@ import { userData } from './user-data.service';
     HomeComponent,
     NavBarComponent,
     AddUserComponent,
+    UserComponent,
   ],
   imports: [BrowserModule, AppRoutingModule, ReactiveFormsModule],
-  providers: [AuthService, AuthGaurdService, userData],
+  providers: [AuthService, AuthGaurdService, UserData],
   bootstrap: [AppComponent],
 })
 export class AppModule {}
