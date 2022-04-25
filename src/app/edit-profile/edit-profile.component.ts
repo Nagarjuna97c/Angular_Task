@@ -1,51 +1,41 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
-import { Observable, Subscription } from 'rxjs';
+import { Observable } from 'rxjs';
 import {
   canComponentDeactivate,
   CanDeactivateGaurd,
 } from '../can-deactivate-gaurd.service';
 import { UserData } from '../user-data.service';
+import { UserModel } from '../user.model';
 
 @Component({
-  selector: 'app-add-user',
-  templateUrl: './add-user.component.html',
-  styleUrls: ['./add-user.component.css'],
+  selector: 'app-edit-profile',
+  templateUrl: './edit-profile.component.html',
+  styleUrls: ['./edit-profile.component.css'],
 })
-export class AddUserComponent implements OnInit, OnDestroy, CanDeactivateGaurd {
-  userDetails: FormGroup;
-  userAlreadyExists = false;
-  emailAlreadyExists = false;
+export class EditProfileComponent implements OnInit, CanDeactivateGaurd {
+  user: UserModel;
+  editForm: FormGroup;
+  validUser = true;
+  validPassword = true;
   formSaved = false;
-
-  errorsSubscription: Subscription;
 
   constructor(private userData: UserData) {}
 
   ngOnInit(): void {
-    this.userDetails = new FormGroup({
-      username: new FormControl(null, [Validators.required]),
-      password: new FormControl(null, [
+    this.user = this.userData.getLoggedInUser();
+    console.log(this.user);
+
+    this.editForm = new FormGroup({
+      username: new FormControl(this.user.username, Validators.required),
+      password: new FormControl(this.user.password, [
         Validators.required,
         this.validatePassword.bind(this),
       ]),
-      email: new FormControl(null, [Validators.required, Validators.email]),
-      isAdmin: new FormControl('no'),
+      email: new FormControl(this.user.email),
     });
-
-    this.errorsSubscription = this.userData.userAddOrEditErrors.subscribe(
-      (error) => {
-        this.userAlreadyExists = false;
-        this.emailAlreadyExists = false;
-        if (error === 'Invalid User') {
-          this.userAlreadyExists = true;
-        }
-        if (error === 'Invalid Email') {
-          this.emailAlreadyExists = true;
-        }
-      }
-    );
+    this.editForm.get('email').disable();
   }
 
   validatePassword(control: FormControl): { [s: string]: boolean } {
@@ -78,13 +68,9 @@ export class AddUserComponent implements OnInit, OnDestroy, CanDeactivateGaurd {
     }
   }
 
-  onAddUser() {
-    const result = this.userData.addUser(this.userDetails.value);
-    if (result) {
-      this.formSaved = true;
-    } else {
-      this.formSaved = false;
-    }
+  onSubmit() {
+    this.userData.updateUser(this.editForm.value, this.user.email);
+    this.formSaved = true;
   }
 
   canDeactivate(
@@ -100,9 +86,5 @@ export class AddUserComponent implements OnInit, OnDestroy, CanDeactivateGaurd {
         'Do you want to move to another page?All the changes made will be lost if you do so.'
       );
     }
-  }
-
-  ngOnDestroy(): void {
-    this.errorsSubscription.unsubscribe();
   }
 }

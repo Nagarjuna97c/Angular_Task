@@ -13,6 +13,7 @@ import { AddUserComponent } from './add-user/add-user.component';
 import { UserData } from './user-data.service';
 import { UserComponent } from './home/user/user.component';
 import { CanDeactivateGaurd } from './can-deactivate-gaurd.service';
+import { EditProfileComponent } from './edit-profile/edit-profile.component';
 
 @NgModule({
   declarations: [
@@ -22,6 +23,7 @@ import { CanDeactivateGaurd } from './can-deactivate-gaurd.service';
     NavBarComponent,
     AddUserComponent,
     UserComponent,
+    EditProfileComponent,
   ],
   imports: [BrowserModule, AppRoutingModule, ReactiveFormsModule],
   providers: [AuthService, AuthGaurdService, UserData, CanDeactivateGaurd],

@@ -1,9 +1,15 @@
+import { Injectable } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { Subject } from 'rxjs';
+import { UserData } from './user-data.service';
+import { UserModel } from './user.model';
 
+@Injectable()
 export class AuthService {
   private loggedIn = false;
   getErrorMessage = new Subject<string>();
+
+  constructor(private userData: UserData) {}
 
   isAuthenticated() {
     return new Promise((resolve, reject) => {
@@ -11,24 +17,20 @@ export class AuthService {
     });
   }
 
-  logIn(userDetails: FormGroup) {
-    let errorMsg: string;
-    if (userDetails['username'] !== 'Hari') {
-      errorMsg = 'Invalid User';
-      this.getErrorMessage.next(errorMsg);
-    } else if (userDetails['password'] !== 'pola') {
-      errorMsg = 'Invalid Password';
-      this.getErrorMessage.next(errorMsg);
-    } else if (
-      userDetails['username'] === 'Hari' &&
-      userDetails['password'] === 'pola'
-    ) {
+  logIn(userDetails: UserModel) {
+    const result = this.userData.validateUser(userDetails);
+    if (typeof result !== 'string') {
       this.loggedIn = true;
+      return true;
+    } else {
+      this.loggedIn = false;
+      this.getErrorMessage.next(result);
+      return false;
     }
-    return this.loggedIn;
   }
 
   logOut() {
+    this.userData.resetAdminData();
     this.loggedIn = false;
   }
 }

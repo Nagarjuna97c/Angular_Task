@@ -1,6 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { Observable } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { UserData } from '../user-data.service';
 import { UserModel } from '../user.model';
 
@@ -9,8 +9,9 @@ import { UserModel } from '../user.model';
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.css'],
 })
-export class HomeComponent implements OnInit {
+export class HomeComponent implements OnInit, OnDestroy {
   usersList: any[] = [];
+  isAdmin = false;
 
   openPopup = false;
   selectedUser: UserModel;
@@ -18,15 +19,25 @@ export class HomeComponent implements OnInit {
   validUser = true;
   validPassword = true;
 
+  adminSubscription: Subscription;
+  usersSubscription: Subscription;
+  editSubscription: Subscription;
+
   constructor(private userData: UserData) {}
 
   ngOnInit(): void {
+    this.isAdmin = this.userData.isAdminOrNot();
+
+    this.adminSubscription = this.userData.sendAdminOrNot.subscribe((value) => {
+      this.isAdmin = value;
+    });
+
     this.usersList = this.userData.getUserList();
-    this.userData.emitUserslist.subscribe((data) => {
+    this.usersSubscription = this.userData.emitUserslist.subscribe((data) => {
       this.usersList = data;
     });
 
-    this.userData.openEditPopup.subscribe((data) => {
+    this.editSubscription = this.userData.openEditPopup.subscribe((data) => {
       this.openPopup = true;
       this.selectedUser = data;
       this.editForm = new FormGroup({
@@ -42,6 +53,8 @@ export class HomeComponent implements OnInit {
       });
       this.editForm.get('email').disable();
     });
+
+    console.log(this.isAdmin);
   }
 
   validatePassword(control: FormControl): { [s: string]: boolean } {
@@ -81,5 +94,11 @@ export class HomeComponent implements OnInit {
 
   closeForm() {
     this.openPopup = false;
+  }
+
+  ngOnDestroy(): void {
+    this.adminSubscription.unsubscribe();
+    this.usersSubscription.unsubscribe();
+    this.editSubscription.unsubscribe();
   }
 }

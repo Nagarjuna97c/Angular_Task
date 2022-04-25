@@ -1,3 +1,9 @@
+.login-form-container {
+  display: flex;
+  align-items: center;
+  min-height: 100vh;
+}
+
 input.ng-invalid.ng-touched {
   border: 1px solid red;
 }

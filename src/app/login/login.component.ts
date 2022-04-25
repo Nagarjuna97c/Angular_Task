@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { Subscription } from 'rxjs';
 import { AuthService } from '../auth.service';
 
 @Component({
@@ -8,10 +9,12 @@ import { AuthService } from '../auth.service';
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css'],
 })
-export class LoginComponent implements OnInit {
+export class LoginComponent implements OnInit, OnDestroy {
   loginData: FormGroup;
   validUser = true;
   validPassword = true;
+
+  errorSubscription: Subscription;
 
   constructor(private authService: AuthService, private router: Router) {}
 
@@ -21,15 +24,17 @@ export class LoginComponent implements OnInit {
       password: new FormControl(null, Validators.required),
     });
 
-    this.authService.getErrorMessage.subscribe((errorMsg) => {
-      if (errorMsg === 'Invalid User') {
-        this.validUser = false;
-        this.validPassword = true;
-      } else {
-        this.validUser = true;
-        this.validPassword = false;
+    this.errorSubscription = this.authService.getErrorMessage.subscribe(
+      (errorMsg) => {
+        if (errorMsg === 'Invalid User') {
+          this.validUser = false;
+          this.validPassword = true;
+        } else {
+          this.validUser = true;
+          this.validPassword = false;
+        }
       }
-    });
+    );
   }
 
   onSubmit() {
@@ -38,5 +43,9 @@ export class LoginComponent implements OnInit {
     if (response) {
       this.router.navigate(['/home']);
     }
+  }
+
+  ngOnDestroy(): void {
+    this.errorSubscription.unsubscribe();
   }
 }

@@ -1,17 +1,44 @@
-import { FormControl } from '@angular/forms';
 import { Subject } from 'rxjs';
 import { UserModel } from './user.model';
 
 export class UserData {
   private usersList: any[] = [];
+  loggedInUser: UserModel;
+  isAdmin = false;
 
   userAddOrEditErrors = new Subject<string>();
 
   emitUserslist = new Subject<any[]>();
   openEditPopup = new Subject<any>();
+  sendAdminOrNot = new Subject<boolean>();
 
   constructor() {
     this.usersList = JSON.parse(localStorage.getItem('userData'));
+  }
+
+  validateUser(userDetails: UserModel) {
+    const response = this.usersList.find(
+      (each) => each.username === userDetails.username
+    );
+    if (response === undefined) {
+      return 'Invalid User';
+    } else if (response.password !== userDetails.password) {
+      return 'Invalid Password';
+    } else {
+      console.log(userDetails);
+      this.loggedInUser = response;
+      if (response.isAdmin === 'yes') {
+        this.isAdmin = true;
+        console.log('user service validateuser:', this.isAdmin);
+        this.sendAdminOrNot.next(true);
+      }
+      return true;
+    }
+  }
+
+  getLoggedInUser() {
+    console.log(this.loggedInUser);
+    return this.loggedInUser;
   }
 
   addUser(userDetails: UserModel) {
@@ -61,5 +88,14 @@ export class UserData {
     const stringifiedUserList = JSON.stringify(this.usersList);
     localStorage.setItem('userData', stringifiedUserList);
     this.emitUserslist.next(this.usersList);
+  }
+
+  isAdminOrNot() {
+    console.log('user service :', this.isAdmin);
+    return this.isAdmin;
+  }
+
+  resetAdminData() {
+    this.isAdmin = false;
   }
 }

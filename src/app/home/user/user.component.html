@@ -7,7 +7,7 @@
     <p class="heading">User Email</p>
     <p>{{ user.email }}</p>
   </div>
-  <div class="buttons">
+  <div class="buttons" *ngIf="isAdmin">
     <button class="btn btn-primary" (click)="openEditPopup()">
       Edit Details
     </button>
