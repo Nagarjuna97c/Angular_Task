@@ -1,0 +1,23 @@
+.center-nav {
+  display: flex;
+  align-items: center;
+  margin: 0;
+  padding: 0 30px;
+  /* justify-content: space-between; */
+}
+
+.nav-links-custom {
+  width: 25%;
+  display: flex;
+  align-items: center;
+  list-style-type: none;
+  justify-content: space-between;
+  margin-left: auto;
+}
+
+a {
+  font-size: 18px;
+  color: #000;
+  text-decoration: none;
+  cursor: pointer;
+}

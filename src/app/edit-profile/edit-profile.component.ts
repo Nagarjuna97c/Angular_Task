@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
-import { Observable } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import {
   canComponentDeactivate,
   CanDeactivateGaurd,
@@ -20,6 +20,9 @@ export class EditProfileComponent implements OnInit, CanDeactivateGaurd {
   validUser = true;
   validPassword = true;
   formSaved = false;
+  duplicateUser = false;
+
+  duplicateUserSubscription: Subscription;
 
   constructor(private userData: UserData) {}
 
@@ -31,41 +34,11 @@ export class EditProfileComponent implements OnInit, CanDeactivateGaurd {
       username: new FormControl(this.user.username, Validators.required),
       password: new FormControl(this.user.password, [
         Validators.required,
-        this.validatePassword.bind(this),
+        this.userData.validatePassword.bind(this),
       ]),
       email: new FormControl(this.user.email),
     });
     this.editForm.get('email').disable();
-  }
-
-  validatePassword(control: FormControl): { [s: string]: boolean } {
-    const password = control.value;
-    if (password !== null) {
-      const specialCharacters = ['!', '@', '#', '$', '%', '^', '&', '*'];
-      let passwordContainsSpecialCharacters = false;
-      let passwordContainsCapitalCase = password
-        .split('')
-        .some(
-          (each: string) => each.charCodeAt(0) >= 65 && each.charCodeAt(0) <= 90
-        );
-
-      specialCharacters.forEach((each) => {
-        if (password.indexOf(each) !== -1) {
-          passwordContainsSpecialCharacters = true;
-        }
-      });
-
-      if (
-        password.length > 8 &&
-        passwordContainsSpecialCharacters &&
-        passwordContainsCapitalCase
-      ) {
-        control.setErrors({ invalidPassword: null });
-        return null;
-      } else {
-        return { invalidPassword: true };
-      }
-    }
   }
 
   onSubmit() {

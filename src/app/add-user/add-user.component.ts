@@ -1,6 +1,10 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
+import {
+  ActivatedRouteSnapshot,
+  Router,
+  RouterStateSnapshot,
+} from '@angular/router';
 import { Observable, Subscription } from 'rxjs';
 import {
   canComponentDeactivate,
@@ -18,17 +22,31 @@ export class AddUserComponent implements OnInit, OnDestroy, CanDeactivateGaurd {
   userAlreadyExists = false;
   emailAlreadyExists = false;
   formSaved = false;
+  isAdmin = false;
 
   errorsSubscription: Subscription;
+  adminSubscription: Subscription;
 
-  constructor(private userData: UserData) {}
+  constructor(private userData: UserData, private router: Router) {}
 
   ngOnInit(): void {
+    this.isAdmin = this.userData.isAdminOrNot();
+    if (this.isAdmin === false) {
+      this.router.navigate(['/home']);
+    }
+
+    this.adminSubscription = this.userData.sendAdminOrNot.subscribe((value) => {
+      this.isAdmin = value;
+      if (this.isAdmin === false) {
+        this.router.navigate(['/home']);
+      }
+    });
+
     this.userDetails = new FormGroup({
       username: new FormControl(null, [Validators.required]),
       password: new FormControl(null, [
         Validators.required,
-        this.validatePassword.bind(this),
+        this.userData.validatePassword.bind(this),
       ]),
       email: new FormControl(null, [Validators.required, Validators.email]),
       isAdmin: new FormControl('no'),
@@ -46,36 +64,6 @@ export class AddUserComponent implements OnInit, OnDestroy, CanDeactivateGaurd {
         }
       }
     );
-  }
-
-  validatePassword(control: FormControl): { [s: string]: boolean } {
-    const password = control.value;
-    if (password !== null) {
-      const specialCharacters = ['!', '@', '#', '$', '%', '^', '&', '*'];
-      let passwordContainsSpecialCharacters = false;
-      let passwordContainsCapitalCase = password
-        .split('')
-        .some(
-          (each: string) => each.charCodeAt(0) >= 65 && each.charCodeAt(0) <= 90
-        );
-
-      specialCharacters.forEach((each) => {
-        if (password.indexOf(each) !== -1) {
-          passwordContainsSpecialCharacters = true;
-        }
-      });
-
-      if (
-        password.length > 8 &&
-        passwordContainsSpecialCharacters &&
-        passwordContainsCapitalCase
-      ) {
-        control.setErrors({ invalidPassword: null });
-        return null;
-      } else {
-        return { invalidPassword: true };
-      }
-    }
   }
 
   onAddUser() {
@@ -104,5 +92,6 @@ export class AddUserComponent implements OnInit, OnDestroy, CanDeactivateGaurd {
 
   ngOnDestroy(): void {
     this.errorsSubscription.unsubscribe();
+    this.adminSubscription.unsubscribe();
   }
 }

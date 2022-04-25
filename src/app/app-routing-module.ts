@@ -10,7 +10,11 @@ import { LoginComponent } from './login/login.component';
 
 const appRoutes: Routes = [
   { path: 'login', component: LoginComponent },
-  { path: 'home', component: HomeComponent, canActivate: [AuthGaurdService] },
+  {
+    path: 'home',
+    component: HomeComponent,
+    // canActivate: [AuthGaurdService]
+  },
   {
     path: 'add-user',
     component: AddUserComponent,

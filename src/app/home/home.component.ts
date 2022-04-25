@@ -11,13 +11,13 @@ import { UserModel } from '../user.model';
 })
 export class HomeComponent implements OnInit, OnDestroy {
   usersList: any[] = [];
+  validUser = true;
+  validPassword = true;
   isAdmin = false;
 
   openPopup = false;
   selectedUser: UserModel;
   editForm: FormGroup;
-  validUser = true;
-  validPassword = true;
 
   adminSubscription: Subscription;
   usersSubscription: Subscription;
@@ -47,44 +47,12 @@ export class HomeComponent implements OnInit, OnDestroy {
         ),
         password: new FormControl(this.selectedUser.password, [
           Validators.required,
-          this.validatePassword.bind(this),
+          this.userData.validatePassword.bind(this),
         ]),
         email: new FormControl(this.selectedUser.email),
       });
       this.editForm.get('email').disable();
     });
-
-    console.log(this.isAdmin);
-  }
-
-  validatePassword(control: FormControl): { [s: string]: boolean } {
-    const password = control.value;
-    if (password !== null) {
-      const specialCharacters = ['!', '@', '#', '$', '%', '^', '&', '*'];
-      let passwordContainsSpecialCharacters = false;
-      let passwordContainsCapitalCase = password
-        .split('')
-        .some(
-          (each: string) => each.charCodeAt(0) >= 65 && each.charCodeAt(0) <= 90
-        );
-
-      specialCharacters.forEach((each) => {
-        if (password.indexOf(each) !== -1) {
-          passwordContainsSpecialCharacters = true;
-        }
-      });
-
-      if (
-        password.length > 8 &&
-        passwordContainsSpecialCharacters &&
-        passwordContainsCapitalCase
-      ) {
-        control.setErrors({ invalidPassword: null });
-        return null;
-      } else {
-        return { invalidPassword: true };
-      }
-    }
   }
 
   onSubmit() {

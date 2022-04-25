@@ -1,7 +1,30 @@
-.login-form-container {
+.main-container {
   display: flex;
   align-items: center;
+  justify-content: center;
   min-height: 100vh;
+}
+
+.login-form-container {
+  width: 500px;
+  background-color: rgb(135, 135, 173);
+  padding: 40px 30px;
+  border-radius: 8px;
+  font-size: 18px;
+  color: #fff;
+  text-shadow: none;
+}
+
+.button-container {
+  display: flex;
+  align-items: center;
+}
+
+button {
+  height: 40px;
+  width: 100px;
+  margin: 0 auto;
+  font-size: 18px;
 }
 
 input.ng-invalid.ng-touched {
@@ -9,5 +32,5 @@ input.ng-invalid.ng-touched {
 }
 
 span {
-  color: red;
+  color: rgb(141, 30, 30);
 }

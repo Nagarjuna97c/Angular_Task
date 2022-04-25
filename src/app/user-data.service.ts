@@ -1,3 +1,4 @@
+import { FormControl } from '@angular/forms';
 import { Subject } from 'rxjs';
 import { UserModel } from './user.model';
 
@@ -9,8 +10,9 @@ export class UserData {
   userAddOrEditErrors = new Subject<string>();
 
   emitUserslist = new Subject<any[]>();
-  openEditPopup = new Subject<any>();
   sendAdminOrNot = new Subject<boolean>();
+  openEditPopup = new Subject<any>();
+  sendUsernameAlreadyExists = new Subject<boolean>();
 
   constructor() {
     this.usersList = JSON.parse(localStorage.getItem('userData'));
@@ -61,17 +63,39 @@ export class UserData {
   }
 
   updateUser(user: UserModel, mail: string) {
-    const updatedList = this.usersList.map((each) => {
-      if (each.email === mail) {
-        return {
-          username: user.username,
-          password: user.password,
-          email: mail,
-          isAdmin: each.isAdmin,
-        };
-      }
-      return each;
-    });
+    const duplicateUser = this.usersList.find(
+      (each) => each.username === user.username
+    );
+
+    console.log(duplicateUser);
+    let updatedList: any[];
+    if (duplicateUser !== undefined) {
+      updatedList = this.usersList.map((each) => {
+        if (each.email === mail && each.username === duplicateUser.username) {
+          return {
+            username: duplicateUser.username,
+            password: user.password,
+            email: mail,
+            isAdmin: each.isAdmin,
+          };
+        }
+        return each;
+      });
+    } else {
+      console.log('here');
+      updatedList = this.usersList.map((each) => {
+        if (each.email === mail) {
+          return {
+            username: user.username,
+            password: user.password,
+            email: mail,
+            isAdmin: each.isAdmin,
+          };
+        }
+        return each;
+      });
+    }
+
     this.usersList = updatedList;
     const stringifiedUserList = JSON.stringify(this.usersList);
     localStorage.setItem('userData', stringifiedUserList);
@@ -91,11 +115,40 @@ export class UserData {
   }
 
   isAdminOrNot() {
-    console.log('user service :', this.isAdmin);
     return this.isAdmin;
   }
 
   resetAdminData() {
     this.isAdmin = false;
+  }
+
+  validatePassword(control: FormControl): { [s: string]: boolean } {
+    const password = control.value;
+    if (password !== null) {
+      const specialCharacters = ['!', '@', '#', '$', '%', '^', '&', '*'];
+      let passwordContainsSpecialCharacters = false;
+      let passwordContainsCapitalCase = password
+        .split('')
+        .some(
+          (each: string) => each.charCodeAt(0) >= 65 && each.charCodeAt(0) <= 90
+        );
+
+      specialCharacters.forEach((each) => {
+        if (password.indexOf(each) !== -1) {
+          passwordContainsSpecialCharacters = true;
+        }
+      });
+
+      if (
+        password.length > 8 &&
+        passwordContainsSpecialCharacters &&
+        passwordContainsCapitalCase
+      ) {
+        control.setErrors({ invalidPassword: null });
+        return null;
+      } else {
+        return { invalidPassword: true };
+      }
+    }
   }
 }
