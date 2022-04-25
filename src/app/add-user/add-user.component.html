@@ -1,4 +1,5 @@
-<div class="container">
+<app-nav-bar></app-nav-bar>
+<div class="container form-center">
   <div class="row">
     <div class="col-xs-12 col-sm-10 col-md-8 col-sm-offset-1 col-md-offset-2">
       <form [formGroup]="userDetails" (ngSubmit)="onAddUser()">
@@ -13,9 +14,14 @@
           <span
             *ngIf="
               !userDetails.get('username').valid &&
-              userDetails.get('username').touched
+              userDetails.get('username').touched &&
+              !userAlreadyExists
             "
             >Enter Valid Username</span
+          >
+          <span *ngIf="userAlreadyExists"
+            >This username has already been taken.Please choose another
+            one.</span
           >
         </div>
         <div class="form-group">
@@ -26,12 +32,15 @@
             class="form-control"
             formControlName="email"
           />
+          <span *ngIf="emailAlreadyExists">Enter a Valid Email Address</span>
           <span
             *ngIf="
               !userDetails.get('email').valid &&
-              userDetails.get('email').touched
+              userDetails.get('email').touched &&
+              emailAlreadyExists
             "
-            >Enter Email</span
+            >An account already exists with same the email address.Please choose
+            another one.</span
           >
         </div>
         <div class="form-group">
@@ -49,9 +58,17 @@
             "
             >Enter Password</span
           >
+          <span
+            *ngIf="
+              !userDetails.get('password').valid &&
+              userDetails.get('password').dirty
+            "
+            >Password should contain atleast 8 characters and a special
+            character</span
+          >
         </div>
         <div class="form-group">
-          <label>Give this user admon previlages?</label>
+          <label>Give this user admin previlages?</label>
           <select formControlName="isAdmin" class="form-control">
             <option value="yes">Yes</option>
             <option value="no">No</option>

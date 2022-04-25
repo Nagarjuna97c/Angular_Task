@@ -1,4 +1,8 @@
 <app-nav-bar></app-nav-bar>
+<button class="btn btn-primary add-user-button" routerLink="/add-user">
+  Add User
+</button>
+
 <div
   class="users-list-container"
   [ngClass]="openPopup ? 'transparent-users' : ''"
@@ -7,7 +11,7 @@
     <app-user [user]="user"></app-user>
   </div>
 </div>
-<div class="container" *ngIf="openPopup">
+<div class="container form-container" *ngIf="openPopup">
   <div class="row">
     <div class="col-xs-12 col-sm-10 col-md-8 col-sm-offset-1 col-md-offset-2">
       <form [formGroup]="editForm" (ngSubmit)="onSubmit()">
@@ -49,15 +53,20 @@
           <span *ngIf="!validPassword">Invalid Password</span>
           <span
             *ngIf="
-              !editForm.get('password').valid &&
-              editForm.get('password').touched &&
-              validPassword
+              !editForm.get('password').valid && editForm.get('password').dirty
             "
-            >Enter Password</span
+            >Password should contain atleast 8 characters and a special
+            character</span
           >
         </div>
         <div style="margin-top: 20px">
-          <button class="btn btn-success" type="submit">Save</button>
+          <button
+            class="btn btn-success"
+            [disabled]="!editForm.valid"
+            type="submit"
+          >
+            Save
+          </button>
           <button class="btn btn-danger" type="button" (click)="closeForm()">
             Close
           </button>

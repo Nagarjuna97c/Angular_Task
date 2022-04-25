@@ -5,3 +5,7 @@ input.ng-invalid.ng-touched {
 span {
   color: red;
 }
+
+.form-center {
+  margin-top: 10%;
+}

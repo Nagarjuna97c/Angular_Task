@@ -12,6 +12,7 @@ import { NavBarComponent } from './nav-bar/nav-bar.component';
 import { AddUserComponent } from './add-user/add-user.component';
 import { UserData } from './user-data.service';
 import { UserComponent } from './home/user/user.component';
+import { CanDeactivateGaurd } from './can-deactivate-gaurd.service';
 
 @NgModule({
   declarations: [
@@ -23,7 +24,7 @@ import { UserComponent } from './home/user/user.component';
     UserComponent,
   ],
   imports: [BrowserModule, AppRoutingModule, ReactiveFormsModule],
-  providers: [AuthService, AuthGaurdService, UserData],
+  providers: [AuthService, AuthGaurdService, UserData, CanDeactivateGaurd],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

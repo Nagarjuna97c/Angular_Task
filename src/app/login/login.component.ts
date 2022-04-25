@@ -23,7 +23,6 @@ export class LoginComponent implements OnInit {
 
     this.authService.getErrorMessage.subscribe((errorMsg) => {
       if (errorMsg === 'Invalid User') {
-        console.log('Invalid User');
         this.validUser = false;
         this.validPassword = true;
       } else {

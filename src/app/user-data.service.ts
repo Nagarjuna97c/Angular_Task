@@ -1,8 +1,11 @@
+import { FormControl } from '@angular/forms';
 import { Subject } from 'rxjs';
 import { UserModel } from './user.model';
 
 export class UserData {
   private usersList: any[] = [];
+
+  userAddOrEditErrors = new Subject<string>();
 
   emitUserslist = new Subject<any[]>();
   openEditPopup = new Subject<any>();
@@ -11,11 +14,19 @@ export class UserData {
     this.usersList = JSON.parse(localStorage.getItem('userData'));
   }
 
-  addUser(userDetails: Object) {
-    // console.log(this.usersList);
-    this.usersList.push(userDetails);
-    const stringifiedUserList = JSON.stringify(this.usersList);
-    localStorage.setItem('userData', stringifiedUserList);
+  addUser(userDetails: UserModel) {
+    if (this.usersList.find((each) => each.username === userDetails.username)) {
+      this.userAddOrEditErrors.next('Invalid User');
+    } else if (
+      this.usersList.find((each) => each.email === userDetails.email)
+    ) {
+      this.userAddOrEditErrors.next('Invalid Email');
+    } else {
+      this.usersList.push(userDetails);
+      const stringifiedUserList = JSON.stringify(this.usersList);
+      localStorage.setItem('userData', stringifiedUserList);
+      return true;
+    }
   }
 
   getUserList() {
@@ -23,7 +34,6 @@ export class UserData {
   }
 
   updateUser(user: UserModel, mail: string) {
-    console.log(user);
     const updatedList = this.usersList.map((each) => {
       if (each.email === mail) {
         return {

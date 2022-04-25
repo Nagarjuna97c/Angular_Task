@@ -32,6 +32,14 @@
           <span
             *ngIf="
               !loginData.get('password').valid &&
+              loginData.get('password').dirty
+            "
+            >Password should contain atleast 8 characters and a special
+            character</span
+          >
+          <span
+            *ngIf="
+              !loginData.get('password').valid &&
               loginData.get('password').touched &&
               validPassword
             "
