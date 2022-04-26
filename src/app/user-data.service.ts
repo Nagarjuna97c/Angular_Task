@@ -1,8 +1,11 @@
+import { Injectable } from '@angular/core';
 import { FormControl } from '@angular/forms';
+import { CookieService } from 'ngx-cookie-service';
 import { Subject } from 'rxjs';
 import { UserModel } from './user.model';
 
-// Storage,change and transfer of user data 
+// Storage,change and transfer of user data
+@Injectable()
 export class UserData {
   private usersList: any[] = [
     {
@@ -22,7 +25,10 @@ export class UserData {
   openEditPopup = new Subject<any>();
   sendUsernameAlreadyExists = new Subject<boolean>();
 
-  constructor() {
+  constructor(private cookieService: CookieService) {
+    const user = JSON.parse(this.cookieService.get('user'));
+    this.isAdmin = user.isAdmin;
+    this.loggedInUser = user;
     if (localStorage.getItem('userData') !== null) {
       this.usersList = [
         ...this.usersList,
@@ -40,6 +46,7 @@ export class UserData {
     } else if (response.password !== userDetails.password) {
       return 'Invalid Password';
     } else {
+      this.cookieService.set('user', JSON.stringify(response));
       this.loggedInUser = response;
       if (response.isAdmin === 'yes') {
         this.isAdmin = true;

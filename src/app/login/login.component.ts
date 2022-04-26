@@ -1,6 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { CookieService } from 'ngx-cookie-service';
 import { Subscription } from 'rxjs';
 import { AuthService } from '../auth.service';
 
@@ -16,10 +17,19 @@ export class LoginComponent implements OnInit, OnDestroy {
 
   errorSubscription: Subscription;
 
-  constructor(private authService: AuthService, private router: Router) {}
+  constructor(
+    private authService: AuthService,
+    private router: Router,
+    private cookieService: CookieService
+  ) {}
 
   // Creating a login form
   ngOnInit(): void {
+    console.log('hello');
+    if (this.cookieService.get('user') !== '') {
+      this.router.navigate(['/home']);
+    }
+    // Creating a login Form
     this.loginData = new FormGroup({
       username: new FormControl(null, Validators.required),
       password: new FormControl(null, Validators.required),

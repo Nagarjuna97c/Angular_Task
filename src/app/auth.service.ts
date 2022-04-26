@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { FormGroup } from '@angular/forms';
+import { CookieService } from 'ngx-cookie-service';
 import { Subject } from 'rxjs';
 import { UserData } from './user-data.service';
 import { UserModel } from './user.model';
@@ -10,11 +11,14 @@ export class AuthService {
   private loggedIn = false;
   getErrorMessage = new Subject<string>();
 
-  constructor(private userData: UserData) {}
+  constructor(
+    private userData: UserData,
+    private cookieService: CookieService
+  ) {}
 
   isAuthenticated() {
     return new Promise((resolve, reject) => {
-      resolve(this.loggedIn);
+      resolve(!(this.cookieService.get('user') === ''));
     });
   }
 
@@ -31,6 +35,7 @@ export class AuthService {
   }
 
   logOut() {
+    this.cookieService.delete('user');
     this.userData.resetAdminData();
     this.loggedIn = false;
   }
