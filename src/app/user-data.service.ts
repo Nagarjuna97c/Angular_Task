@@ -2,6 +2,7 @@ import { FormControl } from '@angular/forms';
 import { Subject } from 'rxjs';
 import { UserModel } from './user.model';
 
+// Storage,change and transfer of user data 
 export class UserData {
   private usersList: any[] = [
     {
@@ -39,11 +40,9 @@ export class UserData {
     } else if (response.password !== userDetails.password) {
       return 'Invalid Password';
     } else {
-      console.log(userDetails);
       this.loggedInUser = response;
       if (response.isAdmin === 'yes') {
         this.isAdmin = true;
-        console.log('user service validateuser:', this.isAdmin);
         this.sendAdminOrNot.next(true);
       }
       return true;
@@ -51,7 +50,6 @@ export class UserData {
   }
 
   getLoggedInUser() {
-    console.log(this.loggedInUser);
     return this.loggedInUser;
   }
 
@@ -79,7 +77,6 @@ export class UserData {
       (each) => each.username === user.username
     );
 
-    console.log(duplicateUser);
     let updatedList: any[];
     if (duplicateUser !== undefined) {
       updatedList = this.usersList.map((each) => {
@@ -94,7 +91,6 @@ export class UserData {
         return each;
       });
     } else {
-      console.log('here');
       updatedList = this.usersList.map((each) => {
         if (each.email === mail) {
           return {

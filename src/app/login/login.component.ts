@@ -18,12 +18,14 @@ export class LoginComponent implements OnInit, OnDestroy {
 
   constructor(private authService: AuthService, private router: Router) {}
 
+  // Creating a login form
   ngOnInit(): void {
     this.loginData = new FormGroup({
       username: new FormControl(null, Validators.required),
       password: new FormControl(null, Validators.required),
     });
 
+    // Getting the login error messages
     this.errorSubscription = this.authService.getErrorMessage.subscribe(
       (errorMsg) => {
         if (errorMsg === 'Invalid User') {
@@ -37,6 +39,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     );
   }
 
+  // Submitting the login form
   onSubmit() {
     const value = this.loginData.value;
     const response = this.authService.logIn(value);
@@ -45,6 +48,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     }
   }
 
+  // destroying the subscriptions
   ngOnDestroy(): void {
     this.errorSubscription.unsubscribe();
   }

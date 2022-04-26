@@ -11,6 +11,7 @@ export interface canComponentDeactivate {
   canDeactivate(): Promise<boolean> | Observable<boolean> | boolean;
 }
 
+// Adds the confirmation functionality when moving out of a component
 export class CanDeactivateGaurd
   implements CanDeactivate<canComponentDeactivate>
 {

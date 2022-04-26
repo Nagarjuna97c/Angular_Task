@@ -10,7 +10,6 @@ export class ConvertToNameFormat implements PipeTransform {
     array.forEach((each) => {
       name += each[0].toUpperCase() + each.slice(1).toLowerCase() + ' ';
     });
-    console.log(name);
     return name;
   }
 }

@@ -9,6 +9,7 @@ import {
 import { Observable } from 'rxjs';
 import { AuthService } from './auth.service';
 
+// Authorization of whether the user is logged in
 @Injectable()
 export class AuthGaurdService implements CanActivate {
   constructor(private authService: AuthService, private router: Router) {}

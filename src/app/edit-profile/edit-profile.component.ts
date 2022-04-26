@@ -28,7 +28,6 @@ export class EditProfileComponent implements OnInit, CanDeactivateGaurd {
 
   ngOnInit(): void {
     this.user = this.userData.getLoggedInUser();
-    console.log(this.user);
 
     this.editForm = new FormGroup({
       username: new FormControl(this.user.username, Validators.required),

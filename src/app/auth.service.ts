@@ -4,6 +4,7 @@ import { Subject } from 'rxjs';
 import { UserData } from './user-data.service';
 import { UserModel } from './user.model';
 
+// Stores,Changes and sends the authorization data
 @Injectable()
 export class AuthService {
   private loggedIn = false;

@@ -28,15 +28,18 @@ export class HomeComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.isAdmin = this.userData.isAdminOrNot();
 
+    // Determines whether the user is admin or not
     this.adminSubscription = this.userData.sendAdminOrNot.subscribe((value) => {
       this.isAdmin = value;
     });
 
+    // Get the list of users from UserService
     this.usersList = this.userData.getUserList();
     this.usersSubscription = this.userData.emitUserslist.subscribe((data) => {
       this.usersList = data;
     });
 
+    // Creating an edit form
     this.editSubscription = this.userData.openEditPopup.subscribe((data) => {
       this.openPopup = true;
       this.selectedUser = data;
@@ -55,15 +58,18 @@ export class HomeComponent implements OnInit, OnDestroy {
     });
   }
 
+  // Updadting the user data
   onSubmit() {
     this.userData.updateUser(this.editForm.value, this.selectedUser.email);
     this.openPopup = false;
   }
 
+  // Closing the popup
   closeForm() {
     this.openPopup = false;
   }
 
+  // removing the subscriptions
   ngOnDestroy(): void {
     this.adminSubscription.unsubscribe();
     this.usersSubscription.unsubscribe();

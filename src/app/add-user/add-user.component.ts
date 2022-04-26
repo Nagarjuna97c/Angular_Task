@@ -30,11 +30,13 @@ export class AddUserComponent implements OnInit, OnDestroy, CanDeactivateGaurd {
   constructor(private userData: UserData, private router: Router) {}
 
   ngOnInit(): void {
+    // Checking Whether user is admin
     this.isAdmin = this.userData.isAdminOrNot();
     if (this.isAdmin === false) {
       this.router.navigate(['/home']);
     }
 
+    // Checking Whether user is admin
     this.adminSubscription = this.userData.sendAdminOrNot.subscribe((value) => {
       this.isAdmin = value;
       if (this.isAdmin === false) {
@@ -42,6 +44,7 @@ export class AddUserComponent implements OnInit, OnDestroy, CanDeactivateGaurd {
       }
     });
 
+    // Form Creation and Validation
     this.userDetails = new FormGroup({
       username: new FormControl(null, [Validators.required]),
       password: new FormControl(null, [
@@ -52,6 +55,7 @@ export class AddUserComponent implements OnInit, OnDestroy, CanDeactivateGaurd {
       isAdmin: new FormControl('no'),
     });
 
+    // Avilability check of username and email for new user
     this.errorsSubscription = this.userData.userAddOrEditErrors.subscribe(
       (error) => {
         this.userAlreadyExists = false;
@@ -66,6 +70,7 @@ export class AddUserComponent implements OnInit, OnDestroy, CanDeactivateGaurd {
     );
   }
 
+  // Add user
   onAddUser() {
     const result = this.userData.addUser(this.userDetails.value);
     if (result) {
@@ -75,6 +80,7 @@ export class AddUserComponent implements OnInit, OnDestroy, CanDeactivateGaurd {
     }
   }
 
+  // Confirmation when moving away from form
   canDeactivate(
     component: canComponentDeactivate,
     currentRoute: ActivatedRouteSnapshot,
@@ -90,6 +96,7 @@ export class AddUserComponent implements OnInit, OnDestroy, CanDeactivateGaurd {
     }
   }
 
+  // Destroting Subscriptions
   ngOnDestroy(): void {
     this.errorsSubscription.unsubscribe();
     this.adminSubscription.unsubscribe();

@@ -8,6 +8,7 @@ import { EditProfileComponent } from './edit-profile/edit-profile.component';
 import { HomeComponent } from './home/home.component';
 import { LoginComponent } from './login/login.component';
 
+// Routes available
 const appRoutes: Routes = [
   { path: 'login', component: LoginComponent },
   {

@@ -16,19 +16,23 @@ export class UserComponent implements OnInit, OnDestroy {
   constructor(private userData: UserData) {}
 
   ngOnInit(): void {
+    // Finding if the user is admin
     this.adminSubscription = this.userData.sendAdminOrNot.subscribe((truth) => {
       this.isAdmin = truth;
     });
   }
 
+  // Opening edit user popup
   openEditPopup() {
     this.userData.openEditPopup.next(this.user);
   }
 
+  // Deleting a user
   deleteUser() {
     this.userData.deleteUser(this.user.email);
   }
 
+  // destroying subscriptions
   ngOnDestroy(): void {
     this.adminSubscription.unsubscribe();
   }
