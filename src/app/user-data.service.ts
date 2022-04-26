@@ -22,10 +22,12 @@ export class UserData {
   sendUsernameAlreadyExists = new Subject<boolean>();
 
   constructor() {
-    this.usersList = [
-      ...this.usersList,
-      ...JSON.parse(localStorage.getItem('userData')),
-    ];
+    if (localStorage.getItem('userData') !== null) {
+      this.usersList = [
+        ...this.usersList,
+        ...JSON.parse(localStorage.getItem('userData')),
+      ];
+    }
   }
 
   validateUser(userDetails: UserModel) {
