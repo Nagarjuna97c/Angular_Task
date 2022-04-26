@@ -3,7 +3,14 @@ import { Subject } from 'rxjs';
 import { UserModel } from './user.model';
 
 export class UserData {
-  private usersList: any[] = [];
+  private usersList: any[] = [
+    {
+      username: 'Beena',
+      password: 'beena@Fission',
+      email: 'beena@Fissionlabs.com',
+      isAdmin: 'yes',
+    },
+  ];
   loggedInUser: UserModel;
   isAdmin = false;
 
@@ -15,7 +22,10 @@ export class UserData {
   sendUsernameAlreadyExists = new Subject<boolean>();
 
   constructor() {
-    this.usersList = JSON.parse(localStorage.getItem('userData'));
+    this.usersList = [
+      ...this.usersList,
+      ...JSON.parse(localStorage.getItem('userData')),
+    ];
   }
 
   validateUser(userDetails: UserModel) {

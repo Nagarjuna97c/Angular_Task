@@ -1,11 +1,12 @@
-<div class="users-list">
+<!-- CARD TYPE DISPLAY FOR USERS -->
+<!-- <div class="users-list">
   <div class="user">
     <p class="heading">User Name</p>
-    <p>{{ user.username }}</p>
+    <p>{{ user.username | convertToNameFormat }}</p>
   </div>
   <div class="mail">
     <p class="heading">User Email</p>
-    <p>{{ user.email }}</p>
+    <p>{{ user.email | convertToMailFormat }}</p>
   </div>
   <div class="buttons" *ngIf="isAdmin">
     <button class="btn btn-primary" (click)="openEditPopup()">
@@ -13,4 +14,20 @@
     </button>
     <button class="btn btn-danger" (click)="deleteUser()">Delete User</button>
   </div>
-</div>
+</div> -->
+
+<!-- TABLE TYPE DISPLAY FOR USERS -->
+<td>
+  <p>{{ user.username | convertToNameFormat }}</p>
+</td>
+<td>
+  <p>{{ user.email | convertToMailFormat }}</p>
+</td>
+<td *ngIf="isAdmin">
+  <button class="btn btn-primary" (click)="openEditPopup()">
+    Edit Details
+  </button>
+</td>
+<td *ngIf="isAdmin">
+  <button class="btn btn-danger" (click)="deleteUser()">Delete User</button>
+</td>

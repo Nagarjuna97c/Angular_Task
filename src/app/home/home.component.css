@@ -1,16 +1,20 @@
+.home-page-container {
+  background-color: aliceblue;
+  min-height: 100vh;
+}
+
 .add-user-container {
   display: flex;
   justify-content: center;
-  /* min-height: 100vh; */
 }
 
-.users-list-container {
+/* .users-list-container {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
   align-items: center;
   position: relative;
-}
+} */
 
 .transparent-users {
   opacity: 0.1;
@@ -21,7 +25,6 @@
   z-index: 1;
   left: 0;
   top: 0;
-  /* padding-top: 15%; */
   width: 100%;
   height: 100%;
   overflow: auto;
@@ -54,5 +57,62 @@ span {
 }
 
 button {
-  margin-right: 20px;
+  height: 40px;
+  font-size: 18px;
+}
+
+/* *********************** */
+
+.users-display-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-top: 30px;
+}
+
+p {
+  font-size: 18px;
+  color: rgb(179, 104, 104);
+}
+
+table {
+  margin-top: 10px;
+}
+
+thead {
+  /* margin: 0; */
+  background-color: rgb(69, 90, 122);
+  height: 40px;
+  color: #fff;
+  font-family: "Roboto";
+}
+
+th {
+  height: 50px;
+  margin: 0;
+  font-size: 18px;
+  padding: 0 20px;
+}
+
+.last-heading {
+  text-align: center;
+}
+
+tr {
+  background-color: rgb(170, 228, 228);
+  padding: 20px;
+}
+
+tr:nth-child(2n) {
+  background-color: rgb(202, 199, 199);
+}
+
+tr.admin-bg {
+  background-color: rgb(165, 206, 104);
+}
+
+.popup-button {
+  height: 40px;
+  margin-right: 10px;
 }

@@ -1,82 +1,105 @@
-<app-nav-bar></app-nav-bar>
-<div class="add-user-container">
-  <button
-    class="btn btn-primary add-user-button"
-    routerLink="/add-user"
-    *ngIf="isAdmin"
-  >
-    Add User
-  </button>
-</div>
-
-<div
-  class="users-list-container"
-  [ngClass]="openPopup ? 'transparent-users' : ''"
->
-  <div *ngFor="let user of usersList">
-    <app-user [isAdmin]="isAdmin" [user]="user"></app-user>
+<div class="home-page-container">
+  <app-nav-bar></app-nav-bar>
+  <div class="add-user-container" *ngIf="isAdmin">
+    <button class="btn btn-primary add-user-button" routerLink="/add-user">
+      Add User
+    </button>
   </div>
-</div>
-<div class="main-container form-container" *ngIf="openPopup">
-  <div class="login-form-container">
-    <form [formGroup]="editForm" (ngSubmit)="onSubmit()">
-      <div class="form-group">
-        <label for="username"> User Name</label>
-        <input
-          type="text"
-          id="username"
-          class="form-control"
-          formControlName="username"
-        />
-        <span *ngIf="!validUser">Invalid User</span>
-        <span
-          *ngIf="
-            !editForm.get('username').valid &&
-            editForm.get('username').touched &&
-            validUser &&
-            !duplicateUser
-          "
-          >Enter Username</span
-        >
+
+  <!-- CARD TYPE DISPLAY FOR USERS -->
+  <!-- <div
+    class="users-list-container"
+    [ngClass]="openPopup ? 'transparent-users' : ''"
+  >
+    <div *ngFor="let user of usersList">
+      <app-user [isAdmin]="isAdmin" [user]="user"></app-user>
+    </div>
+  </div> -->
+
+  <!-- TABLE TYPE DISPLAY FOR USERS -->
+  <div class="users-display-container">
+    <p>All the admin users are marked in green color</p>
+    <table [ngClass]="openPopup ? 'transparent-users' : ''">
+      <thead>
+        <th>User Name</th>
+        <th>Email id</th>
+        <th colspan="2" class="last-heading" *ngIf="isAdmin">Admin Options</th>
+      </thead>
+      <tr
+        app-user
+        *ngFor="let user of usersList"
+        [isAdmin]="isAdmin"
+        [user]="user"
+        [ngClass]="user.isAdmin === 'yes' ? 'admin-bg' : ''"
+      ></tr>
+    </table>
+    <div class="main-container form-container" *ngIf="openPopup">
+      <div class="login-form-container">
+        <form [formGroup]="editForm" (ngSubmit)="onSubmit()">
+          <div class="form-group">
+            <label for="username"> User Name</label>
+            <input
+              type="text"
+              id="username"
+              class="form-control"
+              formControlName="username"
+            />
+            <span *ngIf="!validUser">Invalid User</span>
+            <span
+              *ngIf="
+                !editForm.get('username').valid &&
+                editForm.get('username').touched &&
+                validUser &&
+                !duplicateUser
+              "
+              >Enter Username</span
+            >
+          </div>
+          <div class="form-group">
+            <label for="email"> Email </label>
+            <input
+              type="email"
+              id="email"
+              class="form-control"
+              formControlName="email"
+            />
+          </div>
+          <div class="form-group">
+            <label for="password"> Password</label>
+            <input
+              type="text"
+              id="password"
+              class="form-control"
+              formControlName="password"
+            />
+            <span *ngIf="!validPassword">Invalid Password</span>
+            <span
+              *ngIf="
+                !editForm.get('password').valid &&
+                editForm.get('password').dirty
+              "
+              >Password should contain atleast 8 characters and a special
+              character</span
+            >
+          </div>
+          <div style="margin-top: 20px">
+            <button
+              class="btn btn-success popup-button"
+              [disabled]="!editForm.valid"
+              type="submit"
+            >
+              Save
+            </button>
+            <button
+              class="btn btn-danger popup-button"
+              type="button"
+              (click)="closeForm()"
+            >
+              Close
+            </button>
+          </div>
+        </form>
       </div>
-      <div class="form-group">
-        <label for="email"> Email </label>
-        <input
-          type="email"
-          id="email"
-          class="form-control"
-          formControlName="email"
-        />
-      </div>
-      <div class="form-group">
-        <label for="password"> Password</label>
-        <input
-          type="text"
-          id="password"
-          class="form-control"
-          formControlName="password"
-        />
-        <span *ngIf="!validPassword">Invalid Password</span>
-        <span
-          *ngIf="
-            !editForm.get('password').valid && editForm.get('password').dirty
-          "
-          >Password should contain atleast 8 characters and a special
-          character</span
-        >
-      </div>
-      <div style="margin-top: 20px">
-        <button
-          class="btn btn-success"
-          [disabled]="!editForm.valid"
-          type="submit"
-        >
-          Save
-        </button>
-        <button class="btn btn-danger" type="button" (click)="closeForm()">
-          Close
-        </button>
-      </div>
-    </form>
+    </div>
   </div>
 </div>

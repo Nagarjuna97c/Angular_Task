@@ -14,6 +14,8 @@ import { UserData } from './user-data.service';
 import { UserComponent } from './home/user/user.component';
 import { CanDeactivateGaurd } from './can-deactivate-gaurd.service';
 import { EditProfileComponent } from './edit-profile/edit-profile.component';
+import { ConvertToNameFormat } from './pipe/convert-to-name.pipe';
+import { ConvertToMailFormat } from './pipe/convert-to-email.pipe';
 
 @NgModule({
   declarations: [
@@ -24,6 +26,8 @@ import { EditProfileComponent } from './edit-profile/edit-profile.component';
     AddUserComponent,
     UserComponent,
     EditProfileComponent,
+    ConvertToNameFormat,
+    ConvertToMailFormat,
   ],
   imports: [BrowserModule, AppRoutingModule, ReactiveFormsModule],
   providers: [AuthService, AuthGaurdService, UserData, CanDeactivateGaurd],
